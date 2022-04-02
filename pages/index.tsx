@@ -36,8 +36,8 @@ export default function Home({ posts }: Props) {
           alt="dream-logo"
         />
       </div>
-      <p className="mx-8 my-5 text-2xl font-bold">Posts</p>
-      <div className="w-100 mx-8 grid grid-cols-1 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
+      <p className="mx-3 my-5 text-2xl font-bold md:mx-8">Posts</p>
+      <div className="w-100 mx-3 grid grid-cols-1 sm:grid-cols-2 sm:gap-5 md:mx-8 lg:grid-cols-3">
         {posts.map((post) => (
           <Link href={`/post/slug=${post.slug.current}`} key={post._id}>
             <div className="my-2 overflow-hidden rounded-lg border-2 border-yellow-500 bg-gray-600 text-white">
