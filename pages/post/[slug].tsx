@@ -77,7 +77,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
         }`
 
   const post = await sanityClient.fetch(query, {
-    slug: params.slug.split('=')[1],
+    slug: params?.slug?.slice(5),
   })
 
   if (!post) {
