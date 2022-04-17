@@ -2,15 +2,36 @@ import Header from '../../components/Header'
 import { sanityClient, urlFor } from '../../sanity'
 import { Post } from '../../types'
 import { GetStaticProps } from 'next'
+import PortableText from 'react-portable-text'
 
 interface Props {
   post: [Post]
 }
 
-function Post({ post }: Props) {
+function Post({ post }: Props): JSX.Element {
   return (
     <div>
       <Header />
+      <div>
+        <img
+          className="h-40 w-full object-cover"
+          src={urlFor(post.mainImage).url()!}
+          alt="banner-image"
+        />
+        <article className="mx-auto max-w-3xl p-5">
+          <h1 className="mt-10 mb-3 text-3xl">{post.title}</h1>
+          <h2 className="text-l mb-2 font-light text-gray-500">
+            {post.description}
+          </h2>
+          <div>
+            <PortableText
+              dataset={process.env.NEXT_PUBLIC_SANITY_DATASET!}
+              projectId={process.env.NEXT_PUBLIC_SANITY_PROJECT_ID!}
+              content={post.body}
+            />
+          </div>
+        </article>
+      </div>
     </div>
   )
 }
@@ -40,7 +61,7 @@ export const getStaticPaths = async () => {
 }
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-  const query = `*[_type == "post" && slug.current == 'my-first-dream'][0]{
+  const query = `*[_type == "post" && slug.current == $slug][0]{
         _id,
         _createdAt,
             title,
@@ -55,7 +76,9 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
             'comments': *[_type == "comment" && post._ref == ^._id && approved == true],
         }`
 
-  const post = await sanityClient.fetch(query, { slug: params?.slug })
+  const post = await sanityClient.fetch(query, {
+    slug: params?.slug?.split('=')[1],
+  })
 
   if (!post) {
     return { notFound: true }
