@@ -5,7 +5,7 @@ import { GetStaticProps } from 'next'
 import PortableText from 'react-portable-text'
 
 interface Props {
-  post: [Post]
+  post: Post
 }
 
 function Post({ post }: Props): JSX.Element {
@@ -77,7 +77,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
         }`
 
   const post = await sanityClient.fetch(query, {
-    slug: params?.slug?.split('=')[1],
+    slug: params.slug.split('=')[1],
   })
 
   if (!post) {
