@@ -3,6 +3,7 @@ import { sanityClient, urlFor } from '../../sanity'
 import { Post } from '../../types'
 import { GetStaticProps } from 'next'
 import PortableText from 'react-portable-text'
+import Head from 'next/head'
 
 interface Props {
   post: Post
@@ -11,6 +12,9 @@ interface Props {
 function Post({ post }: Props): JSX.Element {
   return (
     <div>
+      <Head>
+        <title>DudDreamer | {post.title}</title>
+      </Head>
       <Header />
       <div>
         <img
@@ -28,6 +32,32 @@ function Post({ post }: Props): JSX.Element {
               dataset={process.env.NEXT_PUBLIC_SANITY_DATASET!}
               projectId={process.env.NEXT_PUBLIC_SANITY_PROJECT_ID!}
               content={post.body}
+              serializers={{
+                h1: (props: any) => (
+                  <h1 className="my-5 text-3xl font-bold">{props.children}</h1>
+                ),
+                h2: (props: any) => (
+                  <h2 className="my-5 text-2xl font-bold">{props.children}</h2>
+                ),
+                h3: (props: any) => (
+                  <h3 className="my-5 text-2xl font-bold">{props.children}</h3>
+                ),
+                h4: (props: any) => (
+                  <h4 className="text-l my-5 font-bold">{props.children}</h4>
+                ),
+                li: ({ children }: any) => (
+                  <li className="ml-10 list-disc">{children}</li>
+                ),
+                p: ({ children }: any) => <p className="my-4">{children}</p>,
+                blockquote: (props: any) => (
+                  <blockquote className="my-4">{props.children}</blockquote>
+                ),
+                link: ({ href, children }: any) => (
+                  <a href={href} className="text-blue-500 hover:underline">
+                    {children}
+                  </a>
+                ),
+              }}
             />
           </div>
         </article>
